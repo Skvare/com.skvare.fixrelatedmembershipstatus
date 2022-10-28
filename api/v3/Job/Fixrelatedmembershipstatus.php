@@ -25,12 +25,13 @@ function _civicrm_api3_job_Fixrelatedmembershipstatus_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_job_Fixrelatedmembershipstatus($params) {
-  // Spec: civicrm_api3_create_success($values = 1, $params = [], $entity = NULL, $action = NULL)
   $domainID = CRM_Core_Config::domainID();
   $settings = Civi::settings($domainID);
   $fix_status_primary_membership = $settings->get('fix_status_primary_membership');
-  if (!empty($fix_status_primary_membership)) {
+  $fix_status_related_membership = $settings->get('fix_status_related_membership');
+  if (!empty($fix_status_primary_membership) && !empty($fix_status_related_membership)) {
     $fix_status_primary_membership = implode(',', $fix_status_primary_membership);
+    $fix_status_related_membership = implode(',', $fix_status_related_membership);
 
     $sql = "select m.id, m.contact_id, m.status_id,
       m1.id as 'rel_m_id', m1.status_id as 'rel_status_id', m1.contact_id  as 'rel_contact_id'
@@ -41,12 +42,14 @@ function civicrm_api3_job_Fixrelatedmembershipstatus($params) {
       where
       m.status_id <> m1.status_id
       and m.status_id IN ({$fix_status_primary_membership})
+      and m1.status_id IN ({$fix_status_related_membership})
       and c.is_deleted <> 1
       and c.is_deceased <> 1
       and c1.is_deleted <> 1
       and c1.is_deceased <> 1
   ";
     $dao = CRM_Core_DAO::executeQuery($sql);
+    $processCount = 0;
     while ($dao->fetch()) {
       $membershipValues['id'] = $dao->rel_m_id;
       $membershipValues['owner_membership_id'] = $dao->id;
@@ -54,7 +57,10 @@ function civicrm_api3_job_Fixrelatedmembershipstatus($params) {
       $membershipValues['status_id'] = $dao->status_id;
       $membershipValues['skipStatusCal'] = TRUE;
       CRM_Member_BAO_Membership::add($membershipValues);
+      $processCount++;
     }
   }
+  $returnValues = ts('Processed %1 membership records.', [1 => $processCount]);
+
   return civicrm_api3_create_success($returnValues, $params, 'Job', 'Fixrelatedmembershipstatus');
 }

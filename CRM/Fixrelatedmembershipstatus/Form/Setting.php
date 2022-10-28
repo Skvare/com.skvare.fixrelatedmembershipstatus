@@ -14,7 +14,10 @@ class CRM_Fixrelatedmembershipstatus_Form_Setting extends CRM_Core_Form {
     */
     $membershipStatus = CRM_Member_PseudoConstant::membershipStatus(NULL, NULL, 'label');
     $this->add('select', 'fix_status_primary_membership', ts('Keep Related Membership Status same as Primary for these status'),
-      $membershipStatus, FALSE, ['class' => 'crm-select2 huge', 'multiple' => 1]);
+      $membershipStatus, TRUE, ['class' => 'crm-select2 huge', 'multiple' => 1]);
+
+    $this->add('select', 'fix_status_related_membership', ts('Look for related membership status'),
+      $membershipStatus, TRUE, ['class' => 'crm-select2 huge', 'multiple' => 1]);
 
     $this->addButtons(array(
       array(
@@ -46,7 +49,9 @@ class CRM_Fixrelatedmembershipstatus_Form_Setting extends CRM_Core_Form {
     $settings = Civi::settings($domainID);
 
     foreach ($values as $k => $v) {
-      $settings->set($k, $v);
+      if (strpos($k, 'fix_status_') === 0) {
+        $settings->set($k, $v);
+      }
     }
     CRM_Core_Session::setStatus(E::ts('Setting updated successfully'));
   }

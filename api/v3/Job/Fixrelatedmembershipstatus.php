@@ -29,6 +29,7 @@ function civicrm_api3_job_Fixrelatedmembershipstatus($params) {
   $settings = Civi::settings($domainID);
   $fix_status_primary_membership = $settings->get('fix_status_primary_membership');
   $fix_status_related_membership = $settings->get('fix_status_related_membership');
+  $processCount = 0;
   if (!empty($fix_status_primary_membership) && !empty($fix_status_related_membership)) {
     $fix_status_primary_membership = implode(',', $fix_status_primary_membership);
     $fix_status_related_membership = implode(',', $fix_status_related_membership);
@@ -49,8 +50,9 @@ function civicrm_api3_job_Fixrelatedmembershipstatus($params) {
       and c1.is_deceased <> 1
   ";
     $dao = CRM_Core_DAO::executeQuery($sql);
-    $processCount = 0;
+
     while ($dao->fetch()) {
+      $membershipValues = [];
       $membershipValues['id'] = $dao->rel_m_id;
       $membershipValues['owner_membership_id'] = $dao->id;
       $membershipValues['contact_id'] = $dao->rel_contact_id;

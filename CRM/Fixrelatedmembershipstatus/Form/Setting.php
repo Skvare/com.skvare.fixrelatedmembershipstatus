@@ -12,7 +12,7 @@ class CRM_Fixrelatedmembershipstatus_Form_Setting extends CRM_Core_Form {
     /*
     $membershipStatus = CRM_Member_PseudoConstant::membershipStatus(NULL, "(is_current_member <> 1)");
     */
-    $membershipStatus = CRM_Member_PseudoConstant::membershipStatus();
+    $membershipStatus = CRM_Member_PseudoConstant::membershipStatus(NULL, NULL, 'label');
     $this->add('select', 'fix_status_primary_membership', ts('Keep Related Membership Status same as Primary for these status'),
       $membershipStatus, FALSE, ['class' => 'crm-select2 huge', 'multiple' => 1]);
 

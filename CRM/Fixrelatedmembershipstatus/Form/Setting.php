@@ -19,13 +19,13 @@ class CRM_Fixrelatedmembershipstatus_Form_Setting extends CRM_Core_Form {
     $this->add('select', 'fix_status_related_membership', ts('Look for related membership status'),
       $membershipStatus, TRUE, ['class' => 'crm-select2 huge', 'multiple' => 1]);
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Submit'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
@@ -67,7 +67,7 @@ class CRM_Fixrelatedmembershipstatus_Form_Setting extends CRM_Core_Form {
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

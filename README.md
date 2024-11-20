@@ -1,15 +1,16 @@
 # com.skvare.fixrelatedmembershipstatus
 
-![Screenshot](/images/screenshot.png)
+![Screenshot](/images/screenshot2.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+This extension allows you to keep related membership status the same as primary membership status.
+Admin can configure settings to lookup the primary membership status list and related membership status list and update related membership status as per the primary record.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v7.2+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM
 
 ## Installation (Web UI)
 
@@ -22,7 +23,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 cd <extension-dir>
-cv dl com.skvare.fixrelatedmembershipstatus@https://github.com/FIXME/com.skvare.fixrelatedmembershipstatus/archive/master.zip
+cv dl com.skvare.fixrelatedmembershipstatus@https://github.com/Skvare/com.skvare.fixrelatedmembershipstatus/archive/master.zip
 ```
 
 ## Installation (CLI, Git)
@@ -31,14 +32,13 @@ Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) 
 install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
-git clone https://github.com/FIXME/com.skvare.fixrelatedmembershipstatus.git
+git clone https://github.com/Skvare/com.skvare.fixrelatedmembershipstatus.git
 cv en fixrelatedmembershipstatus
 ```
 
 ## Getting Started
+http://domain.name/civicrm/admin/member/fixrelatedstatus
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
-
-## Known Issues
-
-(* FIXME *)
+* `Keep Related Membership Status same as Primary for these status`: Set a list of membership statuses for the primary membership record.
+* `Look for related membership status`: Set a list of membership statuses for related membership records.
+* Scheduled job runs on a daily basis to correct related membership status as per primary membership status.
